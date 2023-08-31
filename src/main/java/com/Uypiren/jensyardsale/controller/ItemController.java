@@ -29,8 +29,6 @@ public class ItemController {
     //rest create Item
     @PostMapping
     public Item createItem(@RequestBody Item item) {
-        System.out.println(item);
-        System.out.println("BEFORE THE SAVE");
         return itemRepository.save(item);
     }
 
@@ -48,7 +46,7 @@ public class ItemController {
     public ResponseEntity<Item> updateItemById(@PathVariable long id, @RequestBody Item itemDetails) {
         Item updateItem = itemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Item with " + id + " cannot be found!"));
         System.out.println(itemDetails.getId());
-        updateItem.setId(itemDetails.getId());
+       // updateItem.setId(itemDetails.getId());
         updateItem.setName(itemDetails.getName());
         updateItem.setDescription(itemDetails.getDescription());
         updateItem.setCategory(itemDetails.getCategory());
@@ -62,7 +60,6 @@ public class ItemController {
     //delete item by id
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> deleteItemBy(@PathVariable long id) {
-        System.out.println(id + " is the id");
         ResponseEntity<Item> deleteItemEntity = getItemById(id);
         Item deleteItem = deleteItemEntity.getBody();
         itemRepository.delete(deleteItem);
@@ -74,7 +71,6 @@ public class ItemController {
     //update item by id
     @PatchMapping("{id}")
     public ResponseEntity<Item> markAsSoldById(@PathVariable long id) {
-        System.out.println("IN mark as sold " + id );
         Item updateItem = itemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Item with " + id + " cannot be found!"));
         updateItem.setPurchased(true);
         updateItem.setPurchaseDate(LocalDate.now());
