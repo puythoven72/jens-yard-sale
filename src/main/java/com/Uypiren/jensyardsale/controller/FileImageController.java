@@ -27,12 +27,16 @@ public class FileImageController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<?> uploadImageToFileSystem(@RequestParam("image") MultipartFile file) throws IOException {
+    @PostMapping()
+    public ResponseEntity<?> uploadImageToFileSystem(@RequestParam("file") MultipartFile file) throws IOException {
         String uploadImage = storageService.uploadImageToFileSystem(file);
-
         return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
     }
+
+
+
+
+
 
     @GetMapping("/{fileName}")
     public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {

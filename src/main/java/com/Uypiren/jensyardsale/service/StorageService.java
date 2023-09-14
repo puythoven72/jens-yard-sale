@@ -14,9 +14,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+
 @Service
 public class StorageService {
-    private final String path = "/jensyardsale-frontend/images/";
+    //private final String path = "/jensyardsale-frontend/images/";
 
     @Autowired
     private ImageRepository imageRepository;
@@ -26,7 +27,7 @@ public class StorageService {
         //this.docStorageLocation = Paths.get(documentStorageProperty.getUploadDirectory()).toAbsolutePath().normalize();
 
 
-        this.docStorageLocation = Paths.get("jensyardsale-frontend\\doc-uploads").toAbsolutePath().normalize();
+        this.docStorageLocation = Paths.get("jensyardsale-frontend\\public\\doc-uploads").toAbsolutePath().normalize();
 
         StringBuilder path = new StringBuilder();
 //        path.append(docStorageLocation);
@@ -43,6 +44,7 @@ public class StorageService {
         System.out.println(file.getName() + " is name");
         System.out.println(file.getContentType() + " is content type");
         System.out.println(file.getOriginalFilename() + " is ORIGINAL Filename");
+
         System.out.println(docStorageLocation);
         ImageData image = new ImageData();
         image.setName(file.getOriginalFilename());
@@ -73,5 +75,7 @@ public class StorageService {
         return images;
 
     }
+
+
 
 }
