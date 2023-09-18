@@ -27,9 +27,20 @@ public class FileImageController {
     }
 
 
+//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+//    public Object upload(@RequestPart("logo") MultipartFile logo,
+//                         @RequestPart("name") String name,
+//                         @RequestPart("info") JsonObject info) throws IOException {
+
+
+//
+
     @PostMapping()
-    public ResponseEntity<?> uploadImageToFileSystem(@RequestParam("file") MultipartFile file) throws IOException {
-        String uploadImage = storageService.uploadImageToFileSystem(file);
+    public ResponseEntity<?> uploadImageToFileSystem(@RequestPart("file") MultipartFile file,  @RequestPart("isMain") String isMain, @RequestPart("itemId") String itemId) throws IOException {
+        System.out.println(isMain + " IsMAIN");
+        System.out.println(itemId + " itemID");
+
+        String uploadImage = storageService.uploadImageToFileSystem(file,itemId,isMain);
         return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
     }
 
