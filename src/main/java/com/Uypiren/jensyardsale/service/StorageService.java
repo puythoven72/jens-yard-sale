@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -83,10 +85,34 @@ public class StorageService {
         StringBuilder filePath = new StringBuilder(fileData.get().getFilePath());
         filePath.append("\\");
         filePath.append(fileData.get().getName());
+        System.out.println(filePath.toString());
         // String filePath2 = "C:\\Users\\puyth\\JavaWebSeriviceProjects\\jensyardsale\\jensyardsale-frontend\\doc-uploads\\bulma-correct.png";
         byte[] images = Files.readAllBytes(new File(filePath.toString()).toPath());
         return images;
 
+    }
+
+    public List getAllItemImageData(String itemId){
+        if(!itemId.isEmpty()){
+            long itemIdL = Long.parseLong(itemId);
+            try{
+                List<ImageData> itemImageList = new ArrayList<>();
+                itemImageList = imageRepository.findByItemId(itemIdL);
+
+                for (var image: itemImageList
+                ) {
+                    System.out.println(image.getName());
+                }
+                return itemImageList;
+            }catch (Exception e){
+                System.out.println(e.getMessage() + " getAllItemImageData");
+
+            }
+
+
+        }
+
+       return null;
     }
 
 
