@@ -1,5 +1,6 @@
 package com.Uypiren.jensyardsale.controller;
 
+import com.Uypiren.jensyardsale.model.images.ImageData;
 import com.Uypiren.jensyardsale.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,6 @@ public class FileImageController {
     }
 
 
-//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
-//    public Object upload(@RequestPart("logo") MultipartFile logo,
-//                         @RequestPart("name") String name,
-//                         @RequestPart("info") JsonObject info) throws IOException {
-
-
-//
-
     @PostMapping()
     public ResponseEntity<?> uploadImageToFileSystem(@RequestPart("file") MultipartFile file, @RequestPart("isMain") String isMain, @RequestPart("itemId") String itemId) throws IOException {
         System.out.println(isMain + " IsMAIN");
@@ -60,9 +53,21 @@ public class FileImageController {
     @GetMapping("getByItemId/{itemId}")
     public ResponseEntity<?> getItemImages(@PathVariable String itemId) throws IOException {
         System.out.println(itemId + " IS WHAT WE ARE GETTING");
-        List allImagesById= storageService.getAllItemImageData(itemId);
+        List allImagesById = storageService.getAllItemImageData(itemId);
         //   byte[] image = storageService.downloadImageFromFileSystem(fileName);
         return ResponseEntity.ok(allImagesById);
-
     }
+
+
+    @PatchMapping("markAsPrimary/{imageId}")
+    public ResponseEntity<ImageData> markAsPrimary(@PathVariable long imageId) {
+        return storageService.markPrimaryImageAsPrimary(imageId);
+    }
+
+    @DeleteMapping("deleteImage/{id}")
+    public ResponseEntity<HttpStatus> deleteImageById(@PathVariable long id) {
+        return storageService.deleteImageById(id);
+    }
+
+
 }

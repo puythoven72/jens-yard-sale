@@ -1,9 +1,12 @@
 package com.Uypiren.jensyardsale.service;
 
 
+import com.Uypiren.jensyardsale.exception.ResourceNotFoundException;
 import com.Uypiren.jensyardsale.model.images.ImageData;
 import com.Uypiren.jensyardsale.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -92,27 +95,72 @@ public class StorageService {
 
     }
 
-    public List getAllItemImageData(String itemId){
-        if(!itemId.isEmpty()){
+    public List getAllItemImageData(String itemId) {
+        if (!itemId.isEmpty()) {
             long itemIdL = Long.parseLong(itemId);
-            try{
+            try {
                 List<ImageData> itemImageList = new ArrayList<>();
                 itemImageList = imageRepository.findByItemId(itemIdL);
-
-                for (var image: itemImageList
-                ) {
-                    System.out.println(image.getName());
-                }
                 return itemImageList;
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage() + " getAllItemImageData");
+            }
+        }
+        return null;
+    }
 
+
+    public ResponseEntity<ImageData> markPrimaryImageAsPrimary(long imageId) {
+        ImageData newPrimaryImage = imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException("Image with " + imageId + " cannot be found!"));
+        String itemId = String.valueOf(newPrimaryImage.getItemId());
+        List<ImageData> imageList = getAllItemImageData(itemId);
+
+        //mark all item images as not primary
+        try {
+            for (ImageData imageData : imageList) {
+                imageData.setPrimary(false);
+                imageRepository.save(imageData);
             }
 
-
+        } catch (ResourceNotFoundException e) {
+            System.out.println(e.getMessage() + " markPrimaryImageAsPrimary");
         }
 
-       return null;
+        newPrimaryImage.setPrimary(true);
+        imageRepository.save(newPrimaryImage);
+        return ResponseEntity.ok(newPrimaryImage);
+    }
+
+
+    public boolean deleteImageByItemId(String itemId) {
+        List<ImageData> imageList = getAllItemImageData(itemId);
+        try {
+            for (ImageData imageData : imageList) {
+                imageRepository.delete(imageData);
+            }
+            return true;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + "deleteImageById");
+        }
+        return false;
+    }
+
+
+    public ResponseEntity<HttpStatus> deleteImageById(Long id) {
+
+        ImageData imageToDelete = imageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Image with " + id + " cannot be found!"));
+       // docStorageLocation = Paths.get("jensyardsale-frontend\\public\\doc-uploads\\" + id).toAbsolutePath().normalize();
+        Path file = Paths.get(imageToDelete.getFilePath()+"\\"+imageToDelete.getName());
+        System.out.println("file1.txt exists before delete:" + file.toString());
+        try {
+            Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //  imageRepository.delete(imageToDelete);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
 
