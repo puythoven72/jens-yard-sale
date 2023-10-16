@@ -61,12 +61,20 @@ public class FileImageController {
 
     @PatchMapping("markAsPrimary/{imageId}")
     public ResponseEntity<ImageData> markAsPrimary(@PathVariable long imageId) {
+        System.out.println(" YOUR IN AND THE ID IS " + imageId);
         return storageService.markPrimaryImageAsPrimary(imageId);
     }
 
     @DeleteMapping("deleteImage/{id}")
     public ResponseEntity<HttpStatus> deleteImageById(@PathVariable long id) {
         return storageService.deleteImageById(id);
+    }
+
+
+    @GetMapping("primaryImage/{imageId}")
+    public ResponseEntity<ImageData> getItemPrimaryImage(@PathVariable long imageId) {
+        System.out.println(" YOUR IN AND THE ID IS " + imageId);
+        return storageService.getPrimaryItemImageData(imageId);
     }
 
 

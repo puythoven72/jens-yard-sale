@@ -1,9 +1,8 @@
 package com.Uypiren.jensyardsale.imagefile.property;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "document")
+//@ConfigurationProperties(prefix = "document")
 @Component
 public class DocumentStorageProperty {
 

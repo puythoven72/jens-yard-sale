@@ -110,6 +110,23 @@ public class StorageService {
     }
 
 
+    public  ResponseEntity<ImageData> getPrimaryItemImageData(Long itemId) {
+      //  if (!itemId.isEmpty()) {
+          //  long itemIdL = Long.parseLong(itemId);
+        System.out.println(itemId);
+            try {
+              //  List<ImageData> itemImageList = new ArrayList<>();
+                ImageData primaryImage = imageRepository.findByItemIdAndIsPrimary(itemId,true);
+                System.out.println(primaryImage.getName() + " IS THE PRIMARY IMAGE for " + primaryImage.getItemId());
+                return ResponseEntity.ok(primaryImage);
+            } catch (Exception e) {
+                System.out.println(e.getMessage() + " getPrimaryItemImageData");
+            }
+     //   }
+        return null;
+    }
+
+
     public ResponseEntity<ImageData> markPrimaryImageAsPrimary(long imageId) {
         ImageData newPrimaryImage = imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException("Image with " + imageId + " cannot be found!"));
         String itemId = String.valueOf(newPrimaryImage.getItemId());
@@ -153,12 +170,12 @@ public class StorageService {
        // docStorageLocation = Paths.get("jensyardsale-frontend\\public\\doc-uploads\\" + id).toAbsolutePath().normalize();
         Path file = Paths.get(imageToDelete.getFilePath()+"\\"+imageToDelete.getName());
         System.out.println("file1.txt exists before delete:" + file.toString());
-        try {
-            Files.deleteIfExists(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        //  imageRepository.delete(imageToDelete);
+//        try {
+//            Files.deleteIfExists(file);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+         imageRepository.delete(imageToDelete);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }

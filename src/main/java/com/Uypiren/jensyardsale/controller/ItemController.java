@@ -15,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/items")
 @CrossOrigin(origins = "http://localhost:3000")
+
+
 public class ItemController {
 
     @Autowired
@@ -36,6 +38,7 @@ public class ItemController {
     //get item by id
     @GetMapping("{id}")
     public ResponseEntity<Item> getItemById(@PathVariable long id) {
+        System.out.println("GET HERE?");
         Item item = itemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Item with " + id + " cannot be found!"));
         return ResponseEntity.ok(item);
     }
@@ -77,6 +80,12 @@ public class ItemController {
         updateItem.setSaleStatus("Sold");
         itemRepository.save(updateItem);
         return ResponseEntity.ok(updateItem);
+    }
+
+
+    @GetMapping("itemsByCategory/{category}")
+    public List<Item> getAllItemByCategory(@PathVariable String category ) {
+        return itemRepository.findItemsByCategory(category);
     }
 
 }
