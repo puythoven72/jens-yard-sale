@@ -42,7 +42,11 @@ public class SecurityConfiguration {
             "api/items/itemsByCategory/**",
             "/api/user/login",
             "api/items/image-admin/primaryImage/**",
-            "api/items/drop-down-selections/**"
+            "api/items/drop-down-selections/100",
+            "api/items/drop-down-selections/200",
+            "api/items/drop-down-selections/300",
+            "api/items/image-admin/getByItemId/**"
+
     };
 
     public static final String LOGIN_URL = "/api/user/login";
@@ -57,7 +61,6 @@ public class SecurityConfiguration {
     public static PasswordEncoder passwordEncoder() {
         System.out.println("DO I GET HERE2");
         return new BCryptPasswordEncoder();
-
     }
 
 

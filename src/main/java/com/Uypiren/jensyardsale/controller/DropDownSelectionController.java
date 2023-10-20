@@ -27,7 +27,13 @@ public class DropDownSelectionController {
     public List<DropDownSelection> getSelectionsById(@PathVariable int selectionType){
         System.out.println("GETTING FOR "+ selectionType +" SALES STATUS SIR");
         return selectionRepository.findBySelectionType(selectionType);
+    }
 
+
+    @PostMapping("/addNewCategory")
+    public DropDownSelection addCategory(@RequestBody DropDownSelection dropDownSelection) {
+        System.out.println(dropDownSelection.getSelectionValue());
+        return selectionRepository.save(dropDownSelection);
     }
 
 }
