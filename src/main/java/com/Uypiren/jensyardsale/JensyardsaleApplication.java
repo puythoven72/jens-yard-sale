@@ -1,13 +1,17 @@
 package com.Uypiren.jensyardsale;
 
+import com.Uypiren.jensyardsale.model.selections.DropDownSelection;
 import com.Uypiren.jensyardsale.repository.DropDownSelectionRepository;
 import com.Uypiren.jensyardsale.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
+
 @SpringBootApplication
-public class JensyardsaleApplication {
+public class JensyardsaleApplication implements CommandLineRunner {
 
 	@Autowired
 	private ItemRepository itemRepository;
@@ -18,21 +22,22 @@ public class JensyardsaleApplication {
 		SpringApplication.run(JensyardsaleApplication.class, args);
 	}
 
-//	@Override
-//	public void run(String... args) throws Exception {
-//
-//
-//		DropDownSelection selection  = new DropDownSelection();
-//		selection.setSelectionType(100);
-//		selection.setSelectionValue("On Hold");
-//	//	selectionRepository.save(selection);
-//
-//
-//		DropDownSelection selection1  = new DropDownSelection();
-//		selection1.setSelectionType(100);
-//		selection1.setSelectionValue("For Sale");
-//	//	selectionRepository.save(selection1);
-//
+	@Override
+	public void run(String... args) throws Exception {
+		List<DropDownSelection> itemStatus = selectionRepository.findBySelectionType(100);
+		if (itemStatus.isEmpty()) {
+
+
+			DropDownSelection selection = new DropDownSelection();
+			selection.setSelectionType(100);
+			selection.setSelectionValue("On Hold");
+			selectionRepository.save(selection);
+
+			DropDownSelection selection1 = new DropDownSelection();
+			selection1.setSelectionType(100);
+			selection1.setSelectionValue("For Sale");
+			selectionRepository.save(selection1);
+
 //		DropDownSelection selection2  = new DropDownSelection();
 //		selection2.setSelectionType(200);
 //		selection2.setSelectionValue("Like New");
@@ -59,5 +64,6 @@ public class JensyardsaleApplication {
 //		selection6.setSelectionValue("Jewelery");
 //	//	selectionRepository.save(selection6);
 //
-//	}
+		}
+	}
 }

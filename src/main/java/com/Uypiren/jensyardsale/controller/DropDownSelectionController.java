@@ -1,9 +1,12 @@
 package com.Uypiren.jensyardsale.controller;
 
 
+import com.Uypiren.jensyardsale.exception.ResourceNotFoundException;
 import com.Uypiren.jensyardsale.model.selections.DropDownSelection;
 import com.Uypiren.jensyardsale.repository.DropDownSelectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +22,11 @@ public class DropDownSelectionController {
 
     @GetMapping
     public List<DropDownSelection> getAllSelections(){
-        System.out.println("GETTING ALL SALES STATUS SIR");
         return selectionRepository.findAll();
     }
 
     @GetMapping("{selectionType}")
     public List<DropDownSelection> getSelectionsById(@PathVariable int selectionType){
-        System.out.println("GETTING FOR "+ selectionType +" SALES STATUS SIR");
         return selectionRepository.findBySelectionType(selectionType);
     }
 
@@ -34,6 +35,15 @@ public class DropDownSelectionController {
     public DropDownSelection addCategory(@RequestBody DropDownSelection dropDownSelection) {
         System.out.println(dropDownSelection.getSelectionValue());
         return selectionRepository.save(dropDownSelection);
+    }
+
+
+    @DeleteMapping("/deleteSelection/{id}")
+    public ResponseEntity<Object> deleteDropDownSelectionById(@PathVariable Integer id ) {
+        System.out.println("deleteting " + id);
+        DropDownSelection selectionToDelete =  selectionRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Selection with id of "+ id + " cannot be found"));
+        selectionRepository.delete(selectionToDelete);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

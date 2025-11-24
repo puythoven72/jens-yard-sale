@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/items")
@@ -86,6 +87,20 @@ public class ItemController {
     @GetMapping("itemsByCategory/{category}")
     public List<Item> getAllItemByCategory(@PathVariable String category ) {
         return itemRepository.findItemsByCategory(category);
+    }
+
+
+    @GetMapping("getAllCategories")
+    public List<String> getAllCategories(){
+        System.out.println("ARE YOU GETTING HERE");
+        List<Item> items = getAllItems();
+        List<String>categories = items.stream().map(Item::getCategory).collect(Collectors.toList());
+        for (String category : categories) {
+            System.out.println(category + " X ");
+
+
+        }
+        return categories;
     }
 
 }
