@@ -47,7 +47,8 @@ public class SecurityConfiguration {
             "api/items/drop-down-selections/200",
             "api/items/drop-down-selections/300",
             "api/items/getAllCategories",
-            "api/items/image-admin/getByItemId/**"
+            "api/items/image-admin/getByItemId/**",
+
 
 
 

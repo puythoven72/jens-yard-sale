@@ -4,6 +4,7 @@ package com.Uypiren.jensyardsale.controller;
 import com.Uypiren.jensyardsale.exception.ResourceNotFoundException;
 import com.Uypiren.jensyardsale.model.Item;
 import com.Uypiren.jensyardsale.repository.ItemRepository;
+import com.Uypiren.jensyardsale.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ public class ItemController {
 
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    StorageService storageService;
 
     @GetMapping
     public List<Item> getAllItems() {
@@ -67,6 +70,7 @@ public class ItemController {
         ResponseEntity<Item> deleteItemEntity = getItemById(id);
         Item deleteItem = deleteItemEntity.getBody();
         itemRepository.delete(deleteItem);
+        storageService.deleteImageByItemId(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -96,6 +96,7 @@ public class StorageService {
     }
 
     public List getAllItemImageData(String itemId) {
+        System.out.println("IN THE DOWNLOAD");
         if (!itemId.isEmpty()) {
             long itemIdL = Long.parseLong(itemId);
             try {
@@ -148,33 +149,40 @@ public class StorageService {
         return ResponseEntity.ok(newPrimaryImage);
     }
 
-
-    public boolean deleteImageByItemId(String itemId) {
-        List<ImageData> imageList = getAllItemImageData(itemId);
+//This will delete the image and the image folder for the item id
+    public boolean deleteImageByItemId(long itemId) {
+       List<ImageData> imageList = getAllItemImageData(String.valueOf(itemId));
+        System.out.println(imageList + " ITEM ID");
+        String directoryPath = null;
         try {
             for (ImageData imageData : imageList) {
-                imageRepository.delete(imageData);
+                directoryPath = imageData.getFilePath();
+                deleteImageById(imageData.getId());
+              //  imageRepository.delete(imageData);
             }
-            return true;
+           if(directoryPath !=null){
+               File folder = new File(directoryPath);
+               return folder.delete();
+           }
 
+//
         } catch (Exception e) {
-            System.out.println(e.getMessage() + "deleteImageById");
-        }
+            System.out.println(e.getMessage() + "deleteImageByItemId");
+       }
         return false;
     }
 
 
     public ResponseEntity<HttpStatus> deleteImageById(Long id) {
-
         ImageData imageToDelete = imageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Image with " + id + " cannot be found!"));
        // docStorageLocation = Paths.get("jensyardsale-frontend\\public\\doc-uploads\\" + id).toAbsolutePath().normalize();
         Path file = Paths.get(imageToDelete.getFilePath()+"\\"+imageToDelete.getName());
         System.out.println("file1.txt exists before delete:" + file.toString());
-//        try {
-//            Files.deleteIfExists(file);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
          imageRepository.delete(imageToDelete);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
